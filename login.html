@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FinTrack Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-left">
+            <h1>FinTrack <span>Pro</span></h1>
+            <p>Take control of your finances with our advanced expense tracking and budgeting tools</p>
+            <ul class="features-list">
+                <li><i class="fas fa-check-circle"></i> Smart expense categorization</li>
+                <li><i class="fas fa-check-circle"></i> Advanced analytics and insights</li>
+                <li><i class="fas fa-check-circle"></i> Budget planning and tracking</li>
+                <li><i class="fas fa-check-circle"></i> Multi-currency support</li>
+                <li><i class="fas fa-check-circle"></i> Dark/Light mode</li>
+                <li><i class="fas fa-check-circle"></i> Data export capabilities</li>
+            </ul>
+        </div>
+        <div class="login-right">
+            <div class="login-form">
+                <h2>Welcome Back</h2>
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">Remember me</label>
+                    </div>
+                    <a href="#" style="color: var(--primary); text-decoration: none;">Forgot Password?</a>
+                </div>
+                <button class="btn btn-primary" id="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <div class="login-footer">
+                    <p>Don't have an account? <a href="#" id="show-register">Sign Up</a></p>
+                </div>
+
+                <!-- Registration Form (Hidden by default) -->
+                <div id="register-form" style="display: none;">
+                    <h2>Create Account</h2>
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" class="form-control" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" class="form-control" placeholder="Create a password">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" class="form-control" placeholder="Confirm your password">
+                    </div>
+                    <button class="btn btn-primary" id="register-btn">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                    <div class="login-footer">
+                        <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            user: null
+        };
+
+        // DOM Elements
+        const elements = {
+            loginForm: document.querySelector('.login-form'),
+            registerForm: document.getElementById('register-form'),
+            showRegister: document.getElementById('show-register'),
+            showLogin: document.getElementById('show-login'),
+            loginBtn: document.getElementById('login-btn'),
+            registerBtn: document.getElementById('register-btn')
+        };
+
+        // Initialize the login page
+        function initLogin() {
+            setupLoginEventListeners();
+            checkRememberedUser();
+        }
+
+        // Set up event listeners for login page
+        function setupLoginEventListeners() {
+            // Login/Register
+            elements.showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                elements.loginForm.style.display = 'none';
+                elements.registerForm.style.display = 'block';
+            });
+
+            elements.showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                elements.registerForm.style.display = 'none';
+                elements.loginForm.style.display = 'block';
+            });
+
+            elements.loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+                
+                if (email && password) {
+                    // For demo purposes, we'll create a user directly
+                    state.user = {
+                        name: email.split('@')[0],
+                        email: email
+                    };
+                    
+                    // Save user to localStorage
+                    localStorage.setItem('user', JSON.stringify(state.user));
+                    
+                    // Redirect to main app
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Please enter email and password');
+                }
+            });
+
+            elements.registerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                if (name && email && password && confirmPassword) {
+                    if (password === confirmPassword) {
+                        state.user = {
+                            name: name,
+                            email: email
+                        };
+                        
+                        // Save user to localStorage
+                        localStorage.setItem('user', JSON.stringify(state.user));
+                        
+                        // Redirect to main app
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Passwords do not match');
+                    }
+                } else {
+                    alert('Please fill all fields');
+                }
+            });
+        }
+
+        // Check if user is remembered
+        function checkRememberedUser() {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('login-email').value = user.email;
+                document.getElementById('remember-me').checked = true;
+            }
+        }
+
+        // Initialize the login page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initLogin);
+    </script>
+</body>
+</html>
