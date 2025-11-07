@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack Pro - Modern Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app-container" class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>FinTrack <span>Pro</span></h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-view="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="#" class="nav-link" data-view="add-expense"><i class="fas fa-plus-circle"></i> <span>Add Expense</span></a></li>
+                <li><a href="#" class="nav-link" data-view="expenses"><i class="fas fa-list"></i> <span>All Expenses</span></a></li>
+                <li><a href="#" class="nav-link" data-view="categories"><i class="fas fa-tags"></i> <span>Categories</span></a></li>
+                <li><a href="#" class="nav-link" data-view="settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <div class="user-details">
+                    <div class="user-name" id="user-name">User</div>
+                    <div class="user-role">Premium Member</div>
+                    <button class="logout-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="page-title">
+                    <h2>Dashboard</h2>
+                    <p>Welcome back! Here's your financial overview</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search expenses...">
+                    </div>
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="currency-selector" id="currency-selector">
+                        <i class="fas fa-dollar-sign"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Hello, <span id="welcome-name">User</span>! 👋</h2>
+                        <p>You've spent ₹2,450 this month. You have ₹2,550 remaining in your budget.</p>
+                    </div>
+                    <div class="welcome-illustration">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="value">₹12,450</div>
+                        <div class="label">Total Balance</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="value">₹2,450</div>
+                        <div class="label">Monthly Spending</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="value">₹3,200</div>
+                        <div class="label">Monthly Income</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="value">₹750</div>
+                        <div class="label">Monthly Savings</div>
+                    </div>
+                </div>
+
+                <!-- Budget Alert -->
+                <div class="alert alert-warning" id="budget-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div id="alert-message">You've spent 49% of your budget this month. You're on track!</div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-value" id="total-expenses">₹2,450</div>
+                        <div class="stat-label">Total Monthly Expense</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-value" id="remaining-budget">₹2,550</div>
+                        <div class="stat-label">Remaining Budget</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="stat-value" id="transaction-count">24</div>
+                        <div class="stat-label">Number of Transactions</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value" id="avg-expense">₹81.67</div>
+                        <div class="stat-label">Average Daily Expense</div>
+                    </div>
+                </div>
+
+                <!-- Budget Progress -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Budget Progress</h3>
+                    </div>
+                    <div class="budget-progress">
+                        <div class="progress-info">
+                            <span id="budget-used">₹2,450</span> of <span id="total-budget">₹5,000</span> used
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" id="budget-progress" style="width: 49%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-container">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Expenses by Category</h3>
+                        </div>
+                        <div id="category-chart" style="width: 100%; height: 300px;"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Monthly Trend</h3>
+                        </div>
+                        <div id="trend-chart" style="width: 100%; height: 300px;"></div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="card recent-transactions">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Transactions</h3>
+                        <a href="#" style="color: var(--primary); text-decoration: none;">View All</a>
+                    </div>
+                    <div class="transaction-list">
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <h4>Dinner at Restaurant</h4>
+                                    <p>Food & Dining • 2 days ago</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount">-₹1,200</div>
+                        </div>
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <h4>Grocery Shopping</h4>
+                                    <p>Shopping • 3 days ago</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount">-₹850</div>
+                        </div>
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-bus"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <h4>Monthly Transport</h4>
+                                    <p>Transport • 5 days ago</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount">-₹400</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Smart Insights</h3>
+                    </div>
+                    <div class="insights-container" id="insights-container">
+                        <div class="card insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="insight-text">
+                                <h4>Spending Alert</h4>
+                                <p>You're spending 15% more on dining out compared to last month.</p>
+                            </div>
+                        </div>
+                        <div class="card insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-piggy-bank"></i>
+                            </div>
+                            <div class="insight-text">
+                                <h4>Savings Opportunity</h4>
+                                <p>You could save ₹800 this month by reducing entertainment expenses.</p>
+                            </div>
+                        </div>
+                        <div class="card insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="insight-text">
+                                <h4>Trend Analysis</h4>
+                                <p>Your grocery spending has decreased by 12% this month. Great job!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Tips -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Daily Saving Tips</h3>
+                    </div>
+                    <div id="daily-tip">
+                        <p>Consider meal planning for the week to reduce food waste and save money on groceries.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Expense View -->
+            <section id="add-expense-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add New Expense</h3>
+                    </div>
+                    <form id="expense-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense-title">Title</label>
+                                <input type="text" id="expense-title" class="form-control" placeholder="E.g., Pizza" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-amount">Amount</label>
+                                <input type="number" id="expense-amount" class="form-control" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense-category">Category</label>
+                                <select id="expense-category" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-payment">Payment Method</label>
+                                <select id="expense-payment" class="form-control" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense-date">Date</label>
+                                <input type="date" id="expense-date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-recurring">Recurring Expense</label>
+                                <select id="expense-recurring" class="form-control">
+                                    <option value="none">None</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expense-notes">Notes (Optional)</label>
+                            <textarea id="expense-notes" class="form-control" rows="3" placeholder="Add any additional notes..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="expense-receipt">Upload Receipt (Optional)</label>
+                            <input type="file" id="expense-receipt" class="form-control" accept="image/*,.pdf">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Add Expense
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Expenses View -->
+            <section id="expenses-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Expenses</h3>
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-primary btn-sm" id="export-csv">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="category-filter">Category:</label>
+                            <select id="category-filter" class="form-control">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="date-filter">Date Range:</label>
+                            <input type="month" id="date-filter" class="form-control">
+                        </div>
+                        <div class="filter-group">
+                            <label for="amount-filter">Amount Range:</label>
+                            <select id="amount-filter" class="form-control">
+                                <option value="">Any Amount</option>
+                                <option value="0-500">₹0 - ₹500</option>
+                                <option value="500-1000">₹500 - ₹1,000</option>
+                                <option value="1000-5000">₹1,000 - ₹5,000</option>
+                                <option value="5000+">₹5,000+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="expenses-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                    <th>Payment</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories View -->
+            <section id="categories-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Manage Categories</h3>
+                    </div>
+                    <div class="category-list" id="category-list">
+                    </div>
+                    <div class="add-category-form">
+                        <h4>Add New Category</h4>
+                        <div class="form-group">
+                            <input type="text" id="new-category" class="form-control" placeholder="Category Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-color">Category Color</label>
+                            <input type="color" id="category-color" class="form-control" value="#4361ee">
+                        </div>
+                        <button class="btn btn-primary" id="add-category-btn">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="settings-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Settings</h3>
+                    </div>
+                    <div class="settings-options">
+                        <div class="form-group">
+                            <label for="monthly-budget">Monthly Budget</label>
+                            <input type="number" id="monthly-budget" class="form-control" placeholder="Enter your monthly budget" value="5000">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency" class="form-control">
+                                <option value="₹">Indian Rupee (₹)</option>
+                                <option value="$">US Dollar ($)</option>
+                                <option value="€">Euro (€)</option>
+                                <option value="£">British Pound (£)</option>
+                                <option value="¥">Japanese Yen (¥)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme-color">Theme Color</label>
+                            <div class="color-options">
+                                <button class="color-option active" data-color="#4361ee" style="background-color: #4361ee;"></button>
+                                <button class="color-option" data-color="#3a86ff" style="background-color: #3a86ff;"></button>
+                                <button class="color-option" data-color="#fb5607" style="background-color: #fb5607;"></button>
+                                <button class="color-option" data-color="#8338ec" style="background-color: #8338ec;"></button>
+                                <button class="color-option" data-color="#06d6a0" style="background-color: #06d6a0;"></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notifications">Notifications</label>
+                            <div>
+                                <input type="checkbox" id="budget-alerts" checked>
+                                <label for="budget-alerts">Budget alerts</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="weekly-reports" checked>
+                                <label for="weekly-reports">Weekly reports</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="monthly-summary">
+                                <label for="monthly-summary">Monthly summary</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="save-settings">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notification-panel">
+            <div class="notification-header">
+                <h3>Notifications</h3>
+                <button class="action-btn" id="close-notifications">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item">
+                    <h4>Budget Alert</h4>
+                    <p>You've spent 49% of your monthly budget</p>
+                    <small>2 hours ago</small>
+                </div>
+                <div class="notification-item warning">
+                    <h4>Unusual Spending</h4>
+                    <p>Your dining out expenses are 25% higher than last month</p>
+                    <small>1 day ago</small>
+                </div>
+                <div class="notification-item">
+                    <h4>Weekly Report</h4>
+                    <p>Your weekly spending report is ready</p>
+                    <small>3 days ago</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
